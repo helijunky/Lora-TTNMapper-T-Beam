@@ -11,7 +11,13 @@
 
 
 // T-Beam specific hardware
-#define BUILTIN_LED 14
+//#define BUILTIN_LED 14
+
+// Heltec
+//#define BUILTIN_LED 25
+
+// TTGO
+#define BUILTIN_LED 2
 
 #define OLED_RESET 4 // not used
 Adafruit_SSD1306 display(OLED_RESET);
@@ -43,14 +49,23 @@ const unsigned TX_INTERVAL = 0;
 // https://www.loratools.nl/#/airtime
 
 // For battery mesurement
-const uint8_t vbatPin = 35;
+//const uint8_t vbatPin = 35; // T-Beam
+const uint8_t vbatPin = 36; // Heltec/TTGO
 float VBAT;  // battery voltage from ESP32 ADC read
 
-// Pin mapping
+// Pin mapping T-Beam
+//const lmic_pinmap lmic_pins = {
+//  .nss = 18,
+//  .rxtx = LMIC_UNUSED_PIN,
+//  .rst = LMIC_UNUSED_PIN, // was "14,"
+//  .dio = {26, 33, 32},
+//};
+
+// Pin mapping Heltec/TTGO
 const lmic_pinmap lmic_pins = {
   .nss = 18,
   .rxtx = LMIC_UNUSED_PIN,
-  .rst = LMIC_UNUSED_PIN, // was "14,"
+  .rst = 14,
   .dio = {26, 33, 32},
 };
 
@@ -175,7 +190,8 @@ void setup() {
   Serial.println(F("TTN Mapper"));
   
   pinMode(vbatPin, INPUT);// Battery mesurement
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 21, 22, 800000);
+  //display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 21, 22, 800000); // T-Beam
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 4, 15, 800000); // Heltec/TTGO
   display.clearDisplay();
   // set text color / Textfarbe setzen
   display.setTextColor(WHITE);

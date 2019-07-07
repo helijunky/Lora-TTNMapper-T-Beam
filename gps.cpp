@@ -78,20 +78,20 @@ bool gps::checkGpsFix()
   else
   {
      Serial.println("No gps Fix.");
-    // sprintf(t, "location valid: %i" , tGps.location.isValid());
-    // Serial.println(t);
-    // sprintf(t, "location age: %i" , tGps.location.age());
-    // Serial.println(t);
-    // sprintf(t, "hdop valid: %i" , tGps.hdop.isValid());
-    // Serial.println(t);
-    // sprintf(t, "hdop age: %i" , tGps.hdop.age());
-    // Serial.println(t);
-    // sprintf(t, "hdop: %i" , tGps.hdop.value());
-    // Serial.println(t);
-    // sprintf(t, "altitude valid: %i" , tGps.altitude.isValid());
-    // Serial.println(t);
-    // sprintf(t, "altitude age: %i" , tGps.altitude.age());
-    // Serial.println(t);
+     sprintf(t, "location valid: %i" , tGps.location.isValid());
+     Serial.println(t);
+     sprintf(t, "location age: %i" , tGps.location.age());
+     Serial.println(t);
+     sprintf(t, "hdop valid: %i" , tGps.hdop.isValid());
+     Serial.println(t);
+     sprintf(t, "hdop age: %i" , tGps.hdop.age());
+     Serial.println(t);
+     sprintf(t, "hdop: %i" , tGps.hdop.value());
+     Serial.println(t);
+     sprintf(t, "altitude valid: %i" , tGps.altitude.isValid());
+     Serial.println(t);
+     sprintf(t, "altitude age: %i" , tGps.altitude.age());
+     Serial.println(t);
 
     return false;
   }
