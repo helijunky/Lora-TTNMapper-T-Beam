@@ -9,15 +9,18 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
+// choose one of the following hardware
+//#define T-BEAM
+#define TTGO-V1
+//#define HELTEC
 
-// T-Beam specific hardware
-//#define BUILTIN_LED 14
-
-// Heltec
-//#define BUILTIN_LED 25
-
-// TTGO
-#define BUILTIN_LED 2
+#ifdef T-BEAM
+ #define BUILTIN_LED 14 // T-Beam
+#elif defined TTGO-V1
+ #define BUILTIN_LED 2  // TTGO
+#elif defined HELTEC
+ #define BUILTIN_LED 25 // Heltec
+#endif
 
 #define OLED_RESET 4 // not used
 Adafruit_SSD1306 display(OLED_RESET);
@@ -53,21 +56,23 @@ const unsigned TX_INTERVAL = 0;
 const uint8_t vbatPin = 36; // Heltec/TTGO
 float VBAT;  // battery voltage from ESP32 ADC read
 
-// Pin mapping T-Beam
-//const lmic_pinmap lmic_pins = {
-//  .nss = 18,
-//  .rxtx = LMIC_UNUSED_PIN,
-//  .rst = LMIC_UNUSED_PIN, // was "14,"
-//  .dio = {26, 33, 32},
-//};
-
-// Pin mapping Heltec/TTGO
-const lmic_pinmap lmic_pins = {
-  .nss = 18,
-  .rxtx = LMIC_UNUSED_PIN,
-  .rst = 14,
-  .dio = {26, 33, 32},
-};
+#ifdef T-BEAM
+ // Pin mapping T-Beam
+ const lmic_pinmap lmic_pins = {
+   .nss = 18,
+   .rxtx = LMIC_UNUSED_PIN,
+   .rst = LMIC_UNUSED_PIN, // was "14,"
+   .dio = {26, 33, 32},
+ };
+#elif defined TTGO-V1 || defined HELTEC
+ // Pin mapping Heltec/TTGO
+ const lmic_pinmap lmic_pins = {
+   .nss = 18,
+   .rxtx = LMIC_UNUSED_PIN,
+   .rst = 14,
+   .dio = {26, 33, 32},
+ };
+#endif
 
 void onEvent (ev_t ev) {
   switch (ev) {
@@ -188,10 +193,24 @@ void do_send(osjob_t* j) {
 void setup() {
   Serial.begin(115200);
   Serial.println(F("TTN Mapper"));
+
+  #if defined TTGO-V1 || defined HELTEC
+   pinMode(16,OUTPUT);     // Heltec/TTGO
+   digitalWrite(16, LOW);  // Heltec/TTGO set GPIO16 low to reset OLED
+   delay(50);              // Heltec/TTGO
+   digitalWrite(16, HIGH); // Heltec/TTGO while OLED is running, must set GPIO16 in high、
+  #endif
+
+  #ifdef T-BEAM
+   pinMode(vbatPin, INPUT);// Battery mesurement
+  #endif
+
+  #ifdef T-BEAM
+   display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 21, 22, 800000); // T-Beam
+  #elif defined TTGO-V1 || defined HELTEC
+   display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 4, 15, 800000); // Heltec/TTGO
+  #endif
   
-  pinMode(vbatPin, INPUT);// Battery mesurement
-  //display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 21, 22, 800000); // T-Beam
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 4, 15, 800000); // Heltec/TTGO
   display.clearDisplay();
   // set text color / Textfarbe setzen
   display.setTextColor(WHITE);
