@@ -9,6 +9,7 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
+
 // T-Beam specific hardware
 #define BUILTIN_LED 14
 
@@ -33,7 +34,13 @@ void os_getDevKey (u1_t* buf) { }
 
 static osjob_t sendjob;
 // Schedule TX every this many seconds (might become longer due to duty cycle limitations).
-const unsigned TX_INTERVAL = 30;
+const unsigned TX_INTERVAL = 0;
+// Physical Payload = header + application payload = 13 + 9 = 22 bytes
+// 1% Duty Cycle: bei 22 Bytes Payload und SF7BW125 Coding 4/5 dürfen max. alle 5.6s ein Paket gesendet werden
+// Duty Cycle wird von LMIC automatisch eingehalten
+// Fair Use Policy (TTN): max. 30s airtime/24h --> max. 530 Pakete/24h bei SF7
+// https://docs.google.com/spreadsheets/d/1voGAtQAjC1qBmaVuP1ApNKs1ekgUjavHuVQIXyYSvNc/edit#gid=0
+// https://www.loratools.nl/#/airtime
 
 // For battery mesurement
 const uint8_t vbatPin = 35;
@@ -148,7 +155,9 @@ void do_send(osjob_t* j) {
       // Prepare upstream data transmission at the next possible time.
       gps.buildPacket(txBuffer);
       LMIC_setTxData2(1, txBuffer, sizeof(txBuffer), 0);
-      Serial.println(F("Packet queued"));
+      sprintf(s, "Packet queued (%d bytes)", sizeof(txBuffer));
+      Serial.println(s);
+      //Serial.println(F("Packet queued"));
       digitalWrite(BUILTIN_LED, HIGH);
       LoraStatus = "Packet queued";
     }
@@ -166,7 +175,7 @@ void setup() {
   Serial.println(F("TTN Mapper"));
   
   pinMode(vbatPin, INPUT);// Battery mesurement
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 22, 21, 800000);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C, 0, 21, 22, 800000);
   display.clearDisplay();
   // set text color / Textfarbe setzen
   display.setTextColor(WHITE);
@@ -222,6 +231,8 @@ void setup() {
 
   // Disable link check validation
   LMIC_setLinkCheckMode(0);
+
+  //LMIC.rps = setBw(LMIC.rps, BW250);
 
   // TTN uses SF9 for its RX2 window.
   LMIC.dn2Dr = DR_SF9;
