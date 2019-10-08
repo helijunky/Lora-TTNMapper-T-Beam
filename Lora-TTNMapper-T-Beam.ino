@@ -9,7 +9,7 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
-// choose one of the following hardware
+// choose one of the following hardware (match with gps.h)
 //#define T-BEAM
 #define TTGO-V1
 //#define HELTEC
@@ -21,6 +21,8 @@
 #elif defined HELTEC
  #define BUILTIN_LED 25 // Heltec
 #endif
+
+#define CFG_eu868
 
 #define OLED_RESET 4 // not used
 Adafruit_SSD1306 display(OLED_RESET);
@@ -52,12 +54,11 @@ const unsigned TX_INTERVAL = 0;
 // https://www.loratools.nl/#/airtime
 
 // For battery mesurement
-//const uint8_t vbatPin = 35; // T-Beam
-const uint8_t vbatPin = 36; // Heltec/TTGO
 float VBAT;  // battery voltage from ESP32 ADC read
 
 #ifdef T-BEAM
  // Pin mapping T-Beam
+ const uint8_t vbatPin = 35; // T-Beam
  const lmic_pinmap lmic_pins = {
    .nss = 18,
    .rxtx = LMIC_UNUSED_PIN,
@@ -66,6 +67,7 @@ float VBAT;  // battery voltage from ESP32 ADC read
  };
 #elif defined TTGO-V1 || defined HELTEC
  // Pin mapping Heltec/TTGO
+ const uint8_t vbatPin = 36; // Heltec/TTGO
  const lmic_pinmap lmic_pins = {
    .nss = 18,
    .rxtx = LMIC_UNUSED_PIN,

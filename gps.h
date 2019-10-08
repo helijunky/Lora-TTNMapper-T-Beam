@@ -4,11 +4,18 @@
 #include <TinyGPS++.h>
 #include <HardwareSerial.h>
 
-//#define GPS_TX 12 // T-Beam
-//#define GPS_RX 15 // T-Beam
-#define GPS_TX 35 // Heltec/TTGO
-#define GPS_RX 12 // Heltec/TTGO
+// choose one of the following hardware
+//#define T-BEAM
+#define TTGO-V1
+//#define HELTEC
 
+#ifdef T-BEAM
+  #define GPS_TX 12 // T-Beam
+  #define GPS_RX 15 // T-Beam
+#elif defined TTGO-V1 || defined HELTEC
+  #define GPS_TX 35 // Heltec/TTGO
+  #define GPS_RX 12 // Heltec/TTGO
+#endif
 
 class gps
 {
