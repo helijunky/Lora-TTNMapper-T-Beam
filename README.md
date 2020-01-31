@@ -8,6 +8,8 @@ Derived from [sbiermann/Lora-TTNMapper-ESP32](https://github.com/sbiermann/Lora-
 
 Please look also at [the repo from Heinrich Hottarek](https://github.com/hottimuc/Lora-TTNMapper-T-Beam) which gives you some additional features.
 
+!!Only for hardware Version up to V07!!
+
 ## Software dependencies
 
 Arduino IDE [ESP32 extension](https://github.com/espressif/arduino-esp32)
