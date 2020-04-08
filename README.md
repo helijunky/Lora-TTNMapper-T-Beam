@@ -6,6 +6,10 @@ This is a simple sketch demonstrating the capability of the [TTGO T-Beam](https:
 
 Derived from [sbiermann/Lora-TTNMapper-ESP32](https://github.com/sbiermann/Lora-TTNMapper-ESP32) and with some information/inspiration from [cyberman54/ESP32-Paxcounter](https://github.com/cyberman54/ESP32-Paxcounter) and [Edzelf/LoRa](https://github.com/Edzelf/LoRa).
 
+Please look also at [the repo from Heinrich Hottarek](https://github.com/hottimuc/Lora-TTNMapper-T-Beam) which gives you some additional features.
+
+!!Only for hardware Version up to V07!!
+
 ## Software dependencies
 
 Arduino IDE [ESP32 extension](https://github.com/espressif/arduino-esp32)
